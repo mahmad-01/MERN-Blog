@@ -1,0 +1,1 @@
+MERN Blog App Created Using React, Typescript, Express, MongoDB, Tailwind
