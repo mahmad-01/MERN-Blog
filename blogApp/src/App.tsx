@@ -1,4 +1,3 @@
-import { createContext, useState } from 'react';
 import './App.css'
 import Router from './components/Router';
 import { AuthProvider } from './context/AuthContext';

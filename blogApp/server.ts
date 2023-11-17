@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises'
 import express from 'express'
-
+import { dbConnect } from './server/db/dbConnect.js'
+import userRouter from "./server/routes/users.js"
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 5173
 const base = process.env.BASE || '/'
+
 
 // Cached production assets
 const templateHtml = isProduction
@@ -16,6 +18,7 @@ const ssrManifest = isProduction
 
 // Create http server
 const app = express()
+app.use("/api/user", userRouter);
 
 // Add Vite or respective production middlewares
 let vite
@@ -30,6 +33,7 @@ if (!isProduction) {
 } else {
     const compression = (await import('compression')).default
     const sirv = (await import('sirv')).default
+    //@ts-ignore
     app.use(compression())
     app.use(base, sirv('./dist/client', { extensions: [] }))
 }
@@ -64,6 +68,23 @@ app.use('*', async (req, res) => {
         res.status(500).end(e.stack)
     }
 })
+
+dbConnect();
+
+// Curb Cores Error by adding a header here
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+    );
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    );
+    next();
+});
+
 
 // Start http server
 app.listen(port, () => {

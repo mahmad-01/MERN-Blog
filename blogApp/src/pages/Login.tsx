@@ -38,25 +38,30 @@ export default function Login() {
     return (
         <>{!localStorage.auth && (
             <>
-                <form className="flex flex-col justify-center gap-5" onSubmit={handleSubmit}>
-                    <div className="flex flex-col justify-center">
-                        <label> Username: </label>
-                        <input name="username" placeholder="Username" defaultValue={loginInfo.username} type="text" onChange={onChange} required></input>
+                <div className="flex flex-col gap-3 justify-center items-center">
+                    <form className="flex flex-col justify-center gap-5" onSubmit={handleSubmit}>
+                        <div className="flex flex-col justify-center">
+                            <label> Username: </label>
+                            <input className="p-2 border-1 border-black rounded-md" name="username" placeholder="Username" defaultValue={loginInfo.username} type="text" onChange={onChange} required></input>
+                        </div>
+                        <div className="flex flex-col justify-center">
+                            <label> Password: </label>
+                            <input className="p-2 border-1 border-black rounded-md" name="password" placeholder="Password" defaultValue={loginInfo.password} type="password" onChange={onChange} required></input>
+                        </div>
+                        <button className=" bg-violet-900" type="submit"> Log In </button>
+                    </form>
+                    <div className="py-10 flex flex-col gap-3">
+                        <button className=" bg-violet-900" onClick={() => { navigate("/signup") }}> Sign Up </button>
+                        <button className=" bg-violet-900" onClick={() => { navigate("/") }}> Go Back </button>
                     </div>
-                    <div className="flex flex-col justify-center">
-                        <label> Password: </label>
-                        <input name="password" placeholder="Password" defaultValue={loginInfo.password} type="password" onChange={onChange} required></input>
-                    </div>
-                    <button type="submit"> Log In </button>
-                </form>
-                <button onClick={() => { navigate("/signup") }}> Sign Up </button>
+                </div>
             </>
         )}
             {localStorage.auth && (
-                <div className="flex flex-col justify-center">
+                <div className="flex flex-col gap-3 justify-center items-center">
                     You have already logged in!
-                    <button onClick={clicked}> Log Out </button>
-                    <button onClick={() => { navigate("/home") }}> Home </button >
+                    <button className=" bg-violet-900" onClick={clicked}> Log Out </button>
+                    <button className=" bg-violet-900" onClick={() => { navigate("/home") }}> Home </button >
                 </div >
             )
             }

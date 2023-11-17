@@ -1,16 +1,13 @@
-import { Link } from "react-router-dom";
-import Login from "./Login";
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
-    function clicked() {
-        localStorage.clear();
-        window.location.reload();
-    }
+    const navigate = useNavigate();
     return (
         <>
-            <div className="flex flex-col">
-                <Link to="/login"> Login </Link>
-                <Link to="/blogs"> Blogs </Link>
-                <button onClick={clicked}> Log Out </button>
+            <div className="flex flex-col gap-4">
+                <p>Welcome to this secret website!</p>
+                <p>Please click the button below to access the secret blog!</p>
+                <button className=" bg-violet-900" onClick={() => { navigate("/login") }}> Enter at your own risk! </button>
             </div>
 
         </>
