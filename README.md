@@ -1,1 +1,1 @@
-MERN Blog App Created Using React, Typescript, Express, MongoDB, Tailwind
+MERN Blog App Created Using Vite, React, Typescript, Node, Express, MongoDB, and Tailwind
