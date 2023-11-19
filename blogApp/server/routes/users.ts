@@ -17,10 +17,6 @@ userRouter.get('/', function (req, res, next) {
     return res.send("USERS");
 });
 
-/* router.get("/auth-endpoint", auth, (request, response) => {
-    response.json({ message: "You are authorized to access me" });
-}); */
-
 userRouter.post("/signup", async (req, res) => {
     var user = await User.findOne({ username: req.body.username });
     if (user) {

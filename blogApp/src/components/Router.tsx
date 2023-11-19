@@ -7,6 +7,7 @@ import Blogs from "../pages/Blogs";
 import SignUp from "../pages/SignUp";
 import Home from "../pages/Home";
 import LoginFail from "../pages/LoginFail";
+import PostBlog from "../pages/PostBlog";
 
 const PrivRoutes = () => {
     const { authenticated } = useContext(AuthContext);
@@ -27,6 +28,7 @@ export default function Router() {
                     <Route path="/home" element={<LoginHome />}></Route>
                     <Route path="/blogs" element={< Blogs />} />
                 </Route>
+                <Route path="/postablog" element={<PostBlog />}></Route>
                 <Route path="/loginfail" element={<LoginFail />} ></Route>
             </Routes >
         </div>
