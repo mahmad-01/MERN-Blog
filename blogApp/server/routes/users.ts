@@ -1,10 +1,14 @@
-import express from "express"
+import express from "express";
 var userRouter = express.Router();
 import bodyParser from "body-parser";
-import { UserT, User } from "../models/users.js";
-import bcrypt from "bcrypt"
+import { User } from "../models/users.js";
+import bcrypt from "bcryptjs";
+import passport from "passport";
+import passportLocal from "passport-local";
+import session from "express-session";
 
 
+const LocalStrategy = passportLocal.Strategy;
 userRouter.use(bodyParser.json());
 userRouter.use(bodyParser.urlencoded({ extended: true }));
 
@@ -19,7 +23,6 @@ userRouter.get('/', function (req, res, next) {
 
 userRouter.post("/signup", async (req, res) => {
     var user = await User.findOne({ username: req.body.username });
-    console.log(user);
     if (user) {
         return res.status(400).send({ message: "User already exists" });
     }
@@ -37,7 +40,6 @@ userRouter.post("/signup", async (req, res) => {
                             message: "User Created Successfully",
                             result,
                         });
-                        res.redirect("/");
                     })
                     .catch((error) => {
                         console.log("error", error.message)
@@ -56,6 +58,58 @@ userRouter.post("/signup", async (req, res) => {
             });
     }
 })
+
+
+userRouter.post("/log-in", async function name(req, res) {
+    const user = await User.findOne({ username: req.body.username });
+    if (user) {
+        const verif = bcrypt.compare(req.body.password, user.password);
+        if (verif) {
+            res.redirect("/");
+            res.send(true);
+        }
+    }
+    else {
+        res.send(false);
+    }
+}
+);
+
+userRouter.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+userRouter.use(passport.initialize());
+userRouter.use(passport.session());
+userRouter.use(express.urlencoded({ extended: false }));
+
+passport.use(
+    new LocalStrategy(async (username, password, done) => {
+        try {
+            const user = await User.findOne({ username: username });
+            if (!user) {
+                return done(null, false, { message: "Incorrect username" });
+            };
+            if (user.password !== password) {
+                return done(null, false, { message: "Incorrect password" });
+            };
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        };
+    })
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    };
+});
+
 
 
 

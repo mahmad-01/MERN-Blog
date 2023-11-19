@@ -2,6 +2,9 @@ import fs from 'node:fs/promises'
 import express from 'express'
 import { dbConnect } from './server/db/dbConnect.js'
 import userRouter from "./server/routes/users.js"
+import postRouter from "./server/routes/posts.js"
+import catRouter from "./server/routes/categories.js"
+import commentRouter from './server/routes/comments.js'
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 5173
@@ -19,6 +22,9 @@ const ssrManifest = isProduction
 // Create http server
 const app = express()
 app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
+app.use("/api/category", catRouter);
+app.use("/api/comment", commentRouter);
 
 // Add Vite or respective production middlewares
 let vite
@@ -52,7 +58,7 @@ app.use('*', async (req, res) => {
             render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
         } else {
             template = templateHtml
-            render = (await import('./dist/server/entry-server.js')).render
+            render = (await import('./src/entry-server.js')).render
         }
 
         const rendered = await render(url, ssrManifest)

@@ -20,6 +20,7 @@ const AuthProvider = ({ children }: Props) => {
     const [authenticated, setAuthenticated] = useState(initial.authenticated)
 
     return (
+
         <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
             {children}
         </AuthContext.Provider>

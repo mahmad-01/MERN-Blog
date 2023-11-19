@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 export interface loginType {
     username: string,
@@ -20,13 +21,22 @@ export default function Login() {
         setLoginInfo({ ...loginInfo, [event.target.name]: event.target.value });
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        setAuthenticated(true);
-        localStorage.auth = authenticated;
-        console.log(authenticated);
         console.log(loginInfo);
-        navigate("/home");
+        const data = { username: loginInfo.username, password: loginInfo.password };
+        const verif = await axios.post("http://localhost:5173/api/user/log-in/", data)
+        if (verif) {
+            setAuthenticated(true);
+            console.log(authenticated);
+            localStorage.auth = authenticated;
+            navigate("/home");
+        }
+        else {
+            navigate("/loginfail");
+        }
+
+
     };
 
     function clicked() {
@@ -36,8 +46,8 @@ export default function Login() {
 
 
     return (
-        <>{!localStorage.auth && (
-            <>
+        <div>{!localStorage.auth && (
+            <div>
                 <div className="flex flex-col gap-3 justify-center items-center">
                     <form className="flex flex-col justify-center gap-5" onSubmit={handleSubmit}>
                         <div className="flex flex-col justify-center">
@@ -55,7 +65,7 @@ export default function Login() {
                         <button className=" bg-violet-900" onClick={() => { navigate("/") }}> Go Back </button>
                     </div>
                 </div>
-            </>
+            </div>
         )}
             {localStorage.auth && (
                 <div className="flex flex-col gap-3 justify-center items-center">
@@ -65,6 +75,6 @@ export default function Login() {
                 </div >
             )
             }
-        </>
+        </div>
     );
 }
