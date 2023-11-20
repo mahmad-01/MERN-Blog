@@ -29,7 +29,7 @@ export default function Blog() {
                 <h2 className="text-2xl font-bold pb-5"> Blogs Page </h2>
                 <button className="bg-violet-900 text-white px-10" onClick={() => { navigate("/postablog") }}> Post a Blog! </button>
             </div>
-            <div className="flex flex-row flex-wrap gap-3 py-5">
+            <div className="flex flex-col flex-wrap gap-3 py-5">
                 {dis}
             </div>
             <Link className=" text-white" to="/home"> <button className=" bg-violet-900"> Back to Home </button>  </Link>
